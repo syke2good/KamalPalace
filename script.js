@@ -1,27 +1,36 @@
-// Change background color on button click
-const button = document.querySelector('#button');
-const body = document.querySelector('body');
+// Code goes here
 
-button.addEventListener('click', () => {
-  body.style.backgroundColor = 'pink';
+// Open menu items in a new tab
+const menuLinks = document.querySelectorAll('.nav-item a');
+
+menuLinks.forEach(link => {
+  if (link.getAttribute('href').startsWith('#')) {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  } else {
+    link.setAttribute('target', '_blank');
+  }
 });
 
-// Display current date and time
-const dateDisplay = document.querySelector('#date-display');
+// Show/hide menu items based on search input
+const searchInput = document.getElementById('search-input');
+const menuItems = document.querySelectorAll('.menu-item');
 
-setInterval(() => {
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-  dateDisplay.innerHTML = formattedDate;
-}, 1000);
-
-// Add a menu item to the cart
-const addToCartButtons = document.querySelectorAll('.add-to-cart');
-
-addToCartButtons.forEach((button) => {
-  button.addEventListener('click', (event) => {
-    const menuItem = event.target.dataset.menuItem;
-    console.log(`Added ${menuItem} to cart!`);
-    // Add code to update cart here
+searchInput.addEventListener('input', (event) => {
+  const searchValue = event.target.value.toLowerCase();
+  menuItems.forEach(item => {
+    const itemName = item.querySelector('.item-name').innerText.toLowerCase();
+    if (itemName.includes(searchValue)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
   });
 });
+
